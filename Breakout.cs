@@ -47,7 +47,7 @@ public class Breakout : MonoBehaviour
 		{
 			// Move bar by user input
 			var barpos = bar.transform.position;
-			barpos.x = Mathf.Clamp(barpos.x + Input.GetAxisRaw("Horizontal") * Time.deltaTime * ballSpeed, -2, 2);
+			barpos.x = Mathf.Clamp(barpos.x + Input.GetAxisRaw("Horizontal") * Time.deltaTime * barSpeed, -2, 2);
 			bar.transform.position = barpos;
 			// Move ball by velocity
 			ball.transform.Translate(velocity * Time.deltaTime, Space.World);
