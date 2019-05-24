@@ -1,7 +1,7 @@
-﻿using System.Collections;
+﻿/* http://creativecommons.org/publicdomain/zero/1.0/deed.ja */
+using System.Collections;
 using System.Linq;
 using UnityEngine;
-
 public class Breakout : MonoBehaviour
 {
 	Sprite sprite;
@@ -27,19 +27,18 @@ public class Breakout : MonoBehaviour
 	IEnumerator Start()
 	{
 		// Setup camera
-		Camera.main.orthographic = true;
-		Camera.main.transform.position = Vector3.zero;
+		FindObjectOfType<Camera>().orthographic = true;
 		// Create audio clip for hit SE.
 		var se = gameObject.AddComponent<AudioSource>();
 		(se.clip = AudioClip.Create("hit", 600, 1, 44100, false))
 			.SetData(Enumerable.Range(0, 600).Select(t => Mathf.Sin(t * 0.1f)).ToArray(), 0);
 		// Create sprites
-		var field = CreateSpriteObject("Field", Color.black, new Vector3(0, 0, 2), new Vector2(120, 200));
+		var field = CreateSpriteObject("Field", Color.black, new Vector3(0, 1, 1), new Vector2(120, 200));
 		var blocks = Enumerable.Range(0, 40).Select(i =>
-			CreateSpriteObject("Block " + i, Color.red, new Vector3(-1.7f + ((3.4f / 4) * (i % 5)), 3 - (0.2f * (i / 5)), 1), new Vector2(20, 4))
+			CreateSpriteObject("Block " + i, Color.red, new Vector3(-1.7f + ((3.4f / 4) * (i % 5)), 4 - (0.2f * (i / 5)), 0), new Vector2(20, 4))
 		).ToList();
-		var bar = CreateSpriteObject("Bar", Color.cyan, new Vector3(0, -3, 1), new Vector2(20, 4));
-		var ball = CreateSpriteObject("Ball", Color.white, new Vector3(0, -2.5f, 1), new Vector2(3, 3));
+		var bar = CreateSpriteObject("Bar", Color.cyan, new Vector3(0, -2, 0), new Vector2(20, 4));
+		var ball = CreateSpriteObject("Ball", Color.white, new Vector3(0, -1.5f, 0), new Vector2(3, 3));
 		ball.transform.rotation = Quaternion.Euler(0, 0, 45);
 		// Start main loop
 		var velocity = new Vector3(1, 1, 0).normalized * ballSpeed;
@@ -70,13 +69,13 @@ public class Breakout : MonoBehaviour
 			}) <= 0) // Detect no blocks broke
 			{
 				// Check fumble
-				if (ballpos.y < -4)
+				if (ballpos.y < -3)
 				{
 					field.color = Color.blue;
 					yield break;
 				}
 				// Check vertical bounce
-				if ((velocity.y < 0 && bar.bounds.Intersects(ball.bounds)) || (velocity.y > 0 && ballpos.y > 3.9f))
+				if ((velocity.y < 0 && bar.bounds.Intersects(ball.bounds)) || (velocity.y > 0 && ballpos.y > 4.9f))
 				{
 					velocity.y *= -1;
 					se.Play();
